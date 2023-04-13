@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ADMIN DASHBOARD</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            body {
+                background-image: linear-gradient(135deg, #E2B0FF 10%, #9F44D3 100%);
+                background-repeat: no-repeat;
+                background-size: cover;
+                /* background-color: #F5F5F5; */
+            }
+            .card {
+                background-color: #FFFFFF;
+                border-radius: 10px;
+                /*background-color: #ff7f50;
+                background-color: #6495ed;
+                background-color: #ffa07a;
+                background-color: #00ced1; */
+            }
+            .card-title {
+                color: #9F44D3;
+                text-align: center;
+                margin-top: 20px;
+                /* color: #F5F5F5; text-align: center;
+                color: white;
+                color: #F5F5F5; text-align: center;
+                color: white;
+                color: #F5F5F5; text-align: center;
+                color: #F5F5F5; text-align: center; */
+            }
+            table {
+                background-color: #FFFFFF;
+                border-collapse: collapse;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                width: 100%;
+            }
+
+            table th, table td {
+                padding: 12px;
+                text-align: center;
+            }
+
+            table tr:nth-child(even) {
+                background-color: #F5F5F5;
+            }
+
+            table tr:hover {
+                background-color: #9F44D3;
+                color: #FFFFFF;
+            }
+
+            #mychart {
+                background-color: #FFFFFF;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                height: 400px; 
+            }
+            h2 {
+                color: #9F44D3;
+                font-size: 2rem;
+                font-weight: bold;
+                margin-bottom: 1rem;
+                text-align: center;
+            }
+
+        </style>
+    </head>
+    <body onload="loadDashboardData()">
+        <div class="container">
+            <div class="mb-3 mt-3">
+                <div class="row" style="margin-top: 5ch;">
+                    <div class="col-3">
+                        <div class="card" >
+                            <div class="card-body">
+                                <h3 class="card-title" >Visitors For Day</h3>
+                                <h5 class="card-title"  id="visitorsDay"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card" >
+                            <div class="card-body">
+                                <h3 class="card-title" >Total Visitors</h3>
+                                <h5 class="card-title"  id="totalVisitors"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card" >
+                            <div class="card-body">
+                                <h3 class="card-title" >Male Visitors</h3>
+                                <h5 class="card-title" id="maleVisitors"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card" >
+                            <div class="card-body">
+                                <h3 class="card-title" >Female Visitors</h3>
+                                <h5 class="card-title" id="femaleVisitors"></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+            <div class="row" style="margin-top: 10ch;">
+                <div class="col-6">
+                    <h2>Visitor Statistics by Age Group</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <td>SI.No</td>
+                                <td>Age Group</td>
+                                <td>Visitors</td>
+                                <td>Overall Visitors</td>
+                            </tr>
+                        </thead>
+                        <tbody id="tableData"></tbody>
+                    </table>
+                </div>
+                <div class="col-6">
+                    <h2>Overall Visitors by Age Group</h2>
+                    <!--bar chart stars-->
+                    <div>
+                        <canvas id="mychart"></canvas>
+                    </div>    
+                    <!--bar chart ends-->
+                </div>
+            </div>
+        </div>
+        <script>
+            function loadDashboardData()
+            {
+                /*Visitors for the Day */
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function()
+                {
+                    if (this.readyState == 4 && this.status == 200)
+                    {
+                        var jsonData = JSON.parse(this.responseText)
+                        var todayVisitorsData = jsonData[0].today_visitors 
+                        document.getElementById("visitorsDay").innerHTML = todayVisitorsData;
+                    }
+                };
+                xhttp.open("GET", "http://localhost:5000/today-visitors",true);
+                xhttp.send();
+                /* Visitors for the Day End */
+        
+                /* Total Visitors for the Day */
+                var xhttpTotalVisitors = new XMLHttpRequest();
+                xhttpTotalVisitors.onreadystatechange = function()
+                {
+                    if (this.readyState == 4 && this.status == 200)
+                    {
+                        var jsonData = JSON.parse(this.responseText)
+                        var todayVisitorsData = jsonData[0].overall_visitors
+                        document.getElementById("totalVisitors").innerHTML = todayVisitorsData;
+                    }
+                };
+                xhttpTotalVisitors.open("GET","http://localhost:5000/overall-visitors", true);
+                xhttpTotalVisitors.send();
+                /* Total Visitors for the Day End */
+        
+                /* Total Male Visitors */
+                var xhttpMaleVisitors = new XMLHttpRequest();
+                xhttpMaleVisitors.onreadystatechange = function()
+                {
+                    if (this.readyState == 4 && this.status == 200)
+                    {
+                        var jsonData = JSON.parse(this.responseText)
+                        var maleVisitorsData = jsonData[0].male_visitors
+                        document.getElementById("maleVisitors").innerHTML = maleVisitorsData;
+                    }
+                };
+                xhttpMaleVisitors.open("GET","http://localhost:5000/male-visitors", true);
+                xhttpMaleVisitors.send();
+                /* Total male visitors */
+        
+                /* Table female visitors  */
+                var xhttpFemaleVisitors = new XMLHttpRequest();
+                xhttpFemaleVisitors.onreadystatechange = function()
+                {
+                    if (this.readyState == 4 && this.status == 200)
+                    {
+                        var jsonData = JSON.parse(this.responseText)
+                        var femaleVisitorsData = jsonData[0].female_visitor
+                        document.getElementById("femaleVisitors").innerHTML = femaleVisitorsData;
+                    }
+                };
+                xhttpFemaleVisitors.open("GET","http://localhost:5000/female-visitors", true);
+                xhttpFemaleVisitors.send();
+                /* Total Female Visitors */
+        
+                /* Table Data Starts */
+                var xhttpDashboard = new XMLHttpRequest ( );
+                xhttpDashboard.onreadystatechange = function() 
+                {
+                    if (this.readyState == 4 && this.status == 200)
+                    {
+                        var jsonData = JSON.parse (this.responseText)
+                        var jsonDataLength = jsonData. length;
+                        var tableData = '';
+                        var sl = 0;
+                        for (var i = 0;i < jsonDataLength;i++)
+                        { 
+                            sl++;
+                            tableData+= '<tr>';
+                            tableData+= '<td>'+sl+'</td>';
+                            tableData+= '<td>'+jsonData[i].gender+'-'+jsonData[i].age+'</td>';
+                            tableData+= '<td>'+jsonData[i].todayAgeClassification+'</td>';
+                            tableData+= '<td>'+jsonData[i].overallAgeClassification+'</td>';
+                            tableData+= '<tr>';
+                        }
+                        document. getElementById("tableData").innerHTML = tableData;
+                    }
+                 };
+                 xhttpDashboard.open ("GET","http://localhost:5000/age-group-classification", true);
+                 xhttpDashboard.send();
+                /* Table Data End */
+        
+                /* Bar Chart Start */
+                var xhttpBarChart = new XMLHttpRequest ();
+                xhttpBarChart.onreadystatechange= function ( ) 
+                {
+                    if (this.readyState == 4 && this.status == 200)
+                    {
+                        var jsonData = JSON.parse (this.responseText)
+                        var monthArr = [];
+                        var jsonDataLength = jsonData. length;
+                        for (var j = 0;j < jsonDataLength; j++)
+                        {
+                            if(jsonData[j].month != 'None')
+                            {
+                                monthArr.push (jsonData [j].month);
+                            }
+                            else
+                            { 
+                                monthArr.push('0')
+        
+                            }
+                        }
+        
+        
+                        const  data = {
+                            labels : ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'],
+                            datasets: [{
+                                label: 'Walmart Visitors Trends',
+                                data:monthArr,
+                                backgroundColor:[
+                                    'rgba(172, 75, 125, 0.8)',
+                                    'rgba(155, 112, 218, 0.8)',
+                                    'rgba(48, 139, 72, 0.8)',
+                                    'rgba(71, 103, 232, 0.8)',
+                                    'rgba(71, 214, 232, 0.8)',
+                                    'rgba(102, 220, 76, 0.8)',
+                                    'rgba(176, 220, 76, 0.53)',
+                                    'rgba(230, 70, 73, 0.53)',
+                                    'rgba(147, 94, 205, 0.53)',
+                                    'rgba(39, 5, 196, 0.53)',
+                                    'rgba(39, 180, 196, 0.53)',
+                                    'rgba(214, 30, 42, 0.77)',
+                                ],
+                                borderColor:[
+                                    'rgb(204, 153, 255)',
+                                    'rgb(204, 0, 102)',
+                                    'rgb(102, 0, 255)',
+                                    'rgb(51, 204, 204)',
+                                    'rgb(255, 153, 51)',
+                                    'rgb(255, 51, 0)',
+                                    'rgb(102, 0, 255)',
+                                    'rgb(204, 255, 51)',
+                                    'rgb(204, 0, 0)',
+                                    'rgb(51, 102, 204)',
+                                    'rgb(0, 102, 153)',
+                                    'rgb(255, 0, 102)',
+                                ],
+                                borderwidth: 1
+                            }]
+                        };
+                        const config ={
+                            type:'bar',
+                            data: data,
+                            options: {
+                                scales: {
+                                    y:{
+                                        beginAtZero: true
+                                    }
+                                }
+                            },
+                        };
+                        const myChart = new Chart(document.getElementById('mychart'),config);
+                    }
+                };
+                xhttpBarChart.open("GET","http://localhost:5000/bargraph",true);
+                xhttpBarChart.send();
+            }
+        </script>
+    </body>
+</html>
+
+
+

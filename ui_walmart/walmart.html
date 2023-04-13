@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walmart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #F1F1F1;
+            background-image: url(https://images.unsplash.com/photo-1528399783831-8318d62d10e5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80);
+        }
+
+        h1 {
+            color: #0046be;
+            text-align: center;
+        }
+
+        label {
+            /* color: #0046be; */
+            color: #000000;
+            font-weight: bold;
+        }
+
+        select, textarea {
+            background-color: #F8F8F8;
+            padding: 5px;
+            width: 100%;
+        }
+        form {
+            border: 2px solid #0046be;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            margin-top: 5ch;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        button[type="button"] {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row" style="margin-top: 10ch;">
+            <h1>WALMART VISITOR COUNTER</h1>
+        </div>
+        <div class="row">            
+            <div>
+                <form id="myForm">
+                    <div class="mb-4 mt-4">
+                        <label>Gender</label>
+                        <select class="form-control" id="gender">
+                            <option value="0">--select--</option>
+                            <option value="1">Male</option>
+                            <option value="2">Female</option>
+                        </select>
+                        <span id="errGender" style="color: red;"></span>
+                        <div class="mb-4 mt-4">
+                            <label>Age Group</label>
+                            <select class="form-control" id="age_group">
+                                <option value="0">--select--</option>
+                                <option value="1">Kid(5-12)</option>
+                                <option value="2">Teenager(13-19)</option>
+                                <option value="3">Youngster(20-30)</option>
+                                <option value="4">Adult(31-60)</option>
+                                <option value="5">Senior citizen(61-100)</option>
+                            </select>
+                            <span id="errAgegroup" style="color: red;"></span>
+                            <div class="mb-4 mt-4">
+                                <label>Comments</label>
+                                <textarea class="form-control" id="comment" ></textarea>
+                                <span id="errComment" style="color: red;"></span>
+                            </div>
+                            <div class="mb-4 mt-4">
+                                <button type="button" class="btn btn-primary" style="width: 100%;" onclick="validateform()">Submit</button>
+                                <span id="successMessage" style="color: green;"></span>
+                            </div>
+                        </div> 
+                    </div> 
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function validateform()
+        {
+            //validation of gender field
+            var gender =document.getElementById('gender').value 
+        
+            if(gender==0)
+            {
+                document.getElementById('errGender').innerHTML = 'please select Gender'
+                return false
+    
+            }
+                else
+            {
+                document.getElementById('errGender').innerHTML = ''
+            }
+            
+            //validation of age group field
+            var agegroup =document.getElementById('age_group').value 
+        
+            if(agegroup==0)
+                {
+                    document.getElementById('errAgegroup').innerHTML = 'please select Age group'
+                    return false
+    
+                }
+            else
+            {
+                document.getElementById('errAgegroup').innerHTML = ''
+            }
+    
+                //comment
+            var comment=document.getElementById('comment').value
+            var regxComment = /^[A-Za-z0-9 ]+$/
+            //we can set what can be typed in the comment box in the []
+    
+            if(comment)
+            {
+                var validcomment=comment.match(regxComment)
+    
+                if(!validcomment)
+                {
+                    document.getElementById('errComment').innerHTML='please enter valid comment'
+                }
+                else
+                document.getElementById('errComment').innerHTML=''
+            }
+            else
+            {
+                document.getElementById('errComment').innerHTML=''
+            }
+            
+            document.getElementById("myForm").reset();
+    
+            //AJAX  code start
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("successMessage").innerHTML = this.responseText;
+                    setTimeout(function() {
+                        document.getElementById('successMessage').innerHTML = '';
+                    }, 3000);
+                }
+            };
+            // all the response received in 'this.responseText',it is a member variable
+    
+            xhttp.open("POST","http://localhost:5000/add-visitors",true);
+            xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xhttp.send("gender="+gender+"&age="+agegroup+"&comments="+comment);
+            // location.reload();
+    
+            // document.getElementById("myForm").reset();
+            
+        }
+    </script>          
+</body>
+</html>
+
+
+ 
