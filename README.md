@@ -28,8 +28,8 @@ This is a web application for tracking and visualizing footfall in real-time at 
             );
 4. Open the server_walmart folder in VS Code.
 5. Open the terminal in VS Code and execute the following commands to set up the Flask server:
-            1. py -3 -m venv venv
-            2. venv\Scripts\activate
+            [^1]: py -3 -m venv venv
+            [^2]: venv\Scripts\activate
             3. pip install Flask
             4. pip install pymysql
             5. pip install flask-cors
