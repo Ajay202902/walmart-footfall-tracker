@@ -17,7 +17,36 @@ This is a web application for tracking and visualizing footfall in real-time at 
 ## Installation
 
 1. Clone the repository to your local machine.
-2. Open the "walmart" folder and run the "app.py" file in VS Code.
+2. Create a database named "walmart" using XAMPP.
+3. Within the "walmart" database, create a table with the following structure
+            CREATE server_walmart (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            gender VARCHAR(30),
+            age INT,
+            comments VARCHAR,
+            date DATE
+            );
+4. Open the server_walmart folder in VS Code.
+5. Open the terminal in VS Code and execute the following commands to set up the Flask server:
+            py -3 -m venv venv
+            venv\Scripts\activate
+            pip install Flask
+            pip install pymysql
+            pip install flask-cors
+            pip install flask-sqlalchemy
+            pip uninstall SQLAlchemy 
+            pip freeze 
+            pip install SQLAlchemy==1.4.46
+
+6. Run the following command in the terminal to start the Flask application:
+            python app.py
+
+7. Open the "walmart" page and "dashboard" page located in the ui_walmart folder.
+8. Explore the Walmart project by interacting with the UI.
+
+
+Make sure you have XAMPP running with the Apache and MySQL services enabled before starting the Flask server. The application should now be up and running locally.
+
 
 
 ## Contributing
