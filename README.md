@@ -17,7 +17,7 @@ This is a web application for tracking and visualizing footfall in real-time at 
 ## Installation
 
 - Clone the repository to your local machine.
-- Create a database named "walmart" using XAMPP.
+- Create a database named "walmart" using [XAMPP](https://www.apachefriends.org/download.html).
 - Within the "walmart" database, create a table with the following structure
  ``` 
  CREATE server_walmart (
